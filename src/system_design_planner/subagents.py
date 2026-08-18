@@ -88,6 +88,7 @@ def build_ai_ml_specialist(backend) -> SubAgent:
             "those files rather than resolving them yourself."
         ),
         "middleware": [MemoryMiddleware(backend=backend, sources=["/memory/AGENTS.md"])],
+        "skills": ["/skills/project/"],
     }
 
 
@@ -127,6 +128,7 @@ def build_orchestration_specialist(backend) -> SubAgent:
             "in the source material."
         ),
         "middleware": [MemoryMiddleware(backend=backend, sources=["/memory/AGENTS.md"])],
+        "skills": ["/skills/project/"],
     }
 
 
@@ -154,4 +156,5 @@ def build_network_specialist(backend) -> SubAgent:
             "rather than resolving them yourself."
         ),
         "middleware": [MemoryMiddleware(backend=backend, sources=["/memory/AGENTS.md"])],
+        "skills": ["/skills/project/"],
     }
