@@ -53,6 +53,7 @@ def build_governance_specialist(backend) -> SubAgent:
             "resolving them yourself."
         ),
         "middleware": [MemoryMiddleware(backend=backend, sources=["/memory/AGENTS.md"])],
+        "skills": ["/skills/project/"],
     }
 
 
