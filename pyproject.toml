@@ -1,0 +1,17 @@
+[project]
+name = "system-design-planner"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "cryptography==46.0.2",
+    "deepagents==0.7.5",
+    "langchain-openai>=1.5.0",
+    "langchain-tavily>=0.2.18",
+    "python-dotenv>=1.2.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
