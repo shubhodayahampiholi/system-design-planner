@@ -27,7 +27,7 @@ long-horizon, multi-step problem a harness like this exists to help with.
   back to the model), working in both the terminal and the Streamlit UI
 - **Persistent, agent-maintained memory** (`memory/AGENTS.md`) — the agent
   writes to it, but every write pauses for human approval first
-- **ree real Skills** (`skills/project/`) — progressive disclosure confirmed via LangSmith (`SKILL.md` genuinely read on demand, not just
+- **Three real Skills** (`skills/project/`) — progressive disclosure confirmed via LangSmith (`SKILL.md` genuinely read on demand, not just
   present in context), covering scoping judgment, RAG/embedding design, and
   data pipeline validation
 - **A real custom tool** — Tavily-backed live web search, used to check
