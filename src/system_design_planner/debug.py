@@ -63,3 +63,30 @@ def print_delegation_targets(result):
             if tc["name"] == "task":
                 target = tc["args"].get("subagent_type", "?")
                 print(f"[{i}] task -> {target}")
+
+
+def classify_tool_call(tool_call, mcp_tool_names):
+    """Categorize a tool call for display: subagent, MCP, skill, filesystem, or plain tool.
+
+    Reuses the same signals proven out earlier in this build:
+    - 'task' calls with subagent_type = delegation (print_delegation_targets)
+    - a name matching a known MCP tool = a managed MCP hit
+    - a read_file targeting /skills/project/.../SKILL.md = a skill load
+      (confirmed via LangSmith this is how progressive disclosure surfaces)
+    - everything else filesystem-shaped = plain filesystem ops
+    """
+    name = tool_call["name"]
+    args = tool_call.get("args", {})
+
+    if name == "task":
+        return "subagent", args.get("subagent_type", "?")
+    if name in mcp_tool_names:
+        return "mcp", name
+    if name == "read_file":
+        path = str(args.get("file_path", ""))
+        if "/skills/project/" in path and path.endswith("SKILL.md"):
+            skill_name = path.split("/")[-2]
+            return "skill", skill_name
+    if name in ("read_file", "write_file", "edit_file", "ls", "glob", "grep", "delete"):
+        return "filesystem", name
+    return "tool", name
