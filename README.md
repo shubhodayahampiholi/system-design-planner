@@ -16,18 +16,19 @@ long-horizon, multi-step problem a harness like this exists to help with.
 ## What's actually in here
 
 - **Two filesystem backends** — in-memory (`StateBackend`) and real-disk
-  (`FilesystemBackend`), with path-scoped eny`/`interrupt`
+  (`FilesystemBackend`), with path-scoped `allow`/`deny`/`interrupt`
   permission rules
 - **Five subagents** — four domain specialists (governance, AI/ML,
   orchestration, network) plus a generic extraction subagent, including
   genuine **cross-provider delegation**: the planner runs on Claude, one
-  subagent runs on OpenAI, confirmed via a real LangSmithrace
+  subagent runs on OpenAI, confirmed via a real LangSmith trace
 - **Real human-in-the-loop** — interrupt-gated writes to persistent memory,
-  with actual approve/reject decisions (includina rejection reason sent
+  with actual approve/reject decisions (including a rejection reason sent
   back to the model), working in both the terminal and the Streamlit UI
 - **Persistent, agent-maintained memory** (`memory/AGENTS.md`) — the agent
   writes to it, but every write pauses for human approval first
-- **Three real Skills** (`skills/project/`) — progressive disclosure confirmed via LangSmith (`SKILL.md` genuinely read on demand, not just
+- **Three real Skills** (`skills/project/`) — progressive disclosure
+  confirmed via LangSmith (`SKILL.md` genuinely read on demand, not just
   present in context), covering scoping judgment, RAG/embedding design, and
   data pipeline validation
 - **A real custom tool** — Tavily-backed live web search, used to check
@@ -43,7 +44,7 @@ long-horizon, multi-step problem a harness like this exists to help with.
 - Python 3.11+
 - [uv](https://docs.astral.sh/uv/)
 - API keys: Anthropic, OpenAI, Tavily (LangSmith optional but recommended)
-- A Daks workspace with a Unity Catalog function, for the MCP example
+- A Databricks workspace with a Unity Catalog function, for the MCP example
   and the full Streamlit app specifically — everything else runs fully local
 
 ## Setup
@@ -54,7 +55,6 @@ cp .env.example .env   # then fill in your real keys
 ```
 
 ## Project structure
-```
 system-design-planner/
 ├── app.py # Streamlit UI
 ├── knowledge_base/ # grounded, dated reference corpus
@@ -71,7 +71,6 @@ system-design-planner/
 ├── mcp_tools.py # Databricks MCP
 ├── runtime.py # run_with_hitl (terminal HITL loop)
 └── debug.py # trace/thinking/classification helpers
-```
 
 ## Learning path
 
@@ -80,12 +79,14 @@ before the next builds on it.
 
 1. `examples/verify_harness_runs.py` — bare harness, confirms the agent
    genuinely calls its filesystem tools rather than guessing plausibly
-2. `examples/planner_persona.py` — confirms a custom `system_prompscoped to a reference corpus
+2. `examples/planner_persona.py` — confirms a custom `system_prompt` holds
+3. `examples/verify_corpus_access.py` — real disk access via
+   `FilesystemBackend`, scoped to a reference corpus
 4. `examples/verify_extractor_subagent.py` — first subagent, on a different
    model than the parent
 5. `examples/verify_hitl_memory_gate.py` — real interrupt/resume, real human
    approval, not a hardcoded self-approval
-6. `examples/verify_governancecialist.py`,
+6. `examples/verify_governance_specialist.py`,
    `verify_ai_ml_specialist.py`, `verify_orchestration_specialist.py`,
    `verify_network_specialist.py` — each domain specialist individually
 7. `examples/verify_multi_specialist_routing.py` — the parent choosing
@@ -95,7 +96,7 @@ before the next builds on it.
    mechanism then content relevance
 10. `examples/verify_databricks_mcp.py` — a real Databricks managed MCP
     server, discovered and called live
-11. `app.py` — everything above, in one Streamlun streamlit run app.py`
+11. `app.py` — everything above, in one Streamlit UI: `uv run streamlit run app.py`
 
 ## Known limitations, found while building this
 
@@ -108,11 +109,11 @@ flattering:
   real `message` on a `RejectDecision`.
 - **`claude-sonnet-5` gets zero harness-profile tuning, silently.**
   DeepAgents' built-in prompt profiles are pinned to specific model
-  generatns (Sonnet 4.6, not 5) with no provider-wide fallback — and no
+  generations (Sonnet 4.6, not 5) with no provider-wide fallback — and no
   warning when nothing matches.
 - **Skill loading inside a subagent isn't visible in a default Streamlit
   trace.** Confirmed working via LangSmith; not surfaced live without
-  `subgraphs=True` on `.astream()`, which changes thetream's chunk shape
+  `subgraphs=True` on `.astream()`, which changes the stream's chunk shape
   and wasn't applied here.
 - **A real, upstream `SummarizationMiddleware` + extended-thinking bug**
   (tracked at `langchain-ai/langchain#34794`) surfaced once a session ran
