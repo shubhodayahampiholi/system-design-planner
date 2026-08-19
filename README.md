@@ -55,6 +55,7 @@ cp .env.example .env   # then fill in your real keys
 ```
 
 ## Project structure
+```
 system-design-planner/
 ├── app.py # Streamlit UI
 ├── knowledge_base/ # grounded, dated reference corpus
@@ -71,6 +72,7 @@ system-design-planner/
 ├── mcp_tools.py # Databricks MCP
 ├── runtime.py # run_with_hitl (terminal HITL loop)
 └── debug.py # trace/thinking/classification helpers
+```
 
 ## Learning path
 
