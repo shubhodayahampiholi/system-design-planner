@@ -71,6 +71,7 @@ system-design-planner/
 ├── runtime.py # run_with_hitl (terminal HITL loop)
 └── debug.py # trace/thinking/classification helpers
 
+```
 
 ## Learning path
 
